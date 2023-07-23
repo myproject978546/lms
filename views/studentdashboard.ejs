@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <% if(status){ %>
+        <div>admin give you access</div>
+    <% }else{ %>    
+        <div>wait until admin access you</div>
+    <% } %>  
+    <h1>your videos</h1>
+    <% videos.forEach((video)=>{ %>
+        <div class="video">
+            <h1><%= video.title %></h1>
+            <h2><%= video.description %></h2>
+            <video controls src="<%= video.videoname %>"></video>
+        </div>
+    <% }) %>    
+    <!-- <video controls src="16900936391095_6219720129077314067.mp4"></video>   -->
+</body>
+</html>

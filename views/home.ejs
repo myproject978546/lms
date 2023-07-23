@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .center{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        nav{
+            border: 2px solid royalblue;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        #logo{
+            font-size: 20px;
+        }
+        #links{
+            gap: 20px;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="center">
+        <div id="logo">LearnWithMe</div>
+        <div id="links" class="center">
+            <% links.forEach((item)=>{ %>
+                <a href="<%= item.linkurl %>"><%= item.linkname %></a>
+            <% }) %>
+        </div>
+    </nav>
+</body>
+</html>
