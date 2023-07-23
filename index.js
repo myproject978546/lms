@@ -35,8 +35,8 @@ app.get("/",(req,res)=>{
             linkurl:"/register"
         },
         {
-            linkname:"Login",
-            linkurl:"/login"
+            linkname:"My Dashboard",
+            linkurl:"/studentdashboard"
         },
         {
             linkname:"contact us",
@@ -73,7 +73,7 @@ app.get("/admin",(req,res)=>{
     res.render('admin')
 })
 
-app.post("/register",async (req,res)=>{
+app.post("/register",generatetoken,async (req,res)=>{
     const checkifuserexist = await user.findOne({email:req.body.email})    
     if(checkifuserexist){
         res.send("this email is already in use another account")
@@ -94,7 +94,7 @@ app.get("/deactivate/:id", async (req,res)=>{
     res.send("deactivated")
 })
 
-app.post("/login",async (req,res)=>{
+app.post("/login",generatetoken,async (req,res)=>{
     const checkifuserexist = await user.findOne({email:req.body.email,password:req.body.password})
     if(!checkifuserexist){
         res.send("entered user email id or password wrong")
@@ -102,6 +102,12 @@ app.post("/login",async (req,res)=>{
         const videos = await video.find()
         res.render('studentdashboard',{status:checkifuserexist.status,videos})
     }
+})
+
+app.get("/studentdashboard",verifytoken,async (req,res)=>{
+    const checkifuserexist = await user.findOne({email:req.mydata.email,password:req.mydata.password})
+    const videos = await video.find()
+    res.render('studentdashboard',{status:checkifuserexist.status,videos})
 })
 
 app.get("/allstudents",async (req,res)=>{

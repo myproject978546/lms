@@ -8,7 +8,7 @@ async function generatetoken(req,res,next){
         res.cookie("token",token,{maxAge:86000000})
         next()
     }catch{
-        res.send("internal server error")
+        res.send("internal server error while generating jwt token")
     }
 }
 
@@ -19,8 +19,9 @@ async function verifytoken(req,res,next){
         const check = await user.findOne({email:getpayload.email})
         if(!check){
             res.send("you have to login or register")
+        }else{
+            req.mydata = check;
         }
-        req.mydata = check;
         next();
     }catch{
         const links = [
@@ -31,14 +32,6 @@ async function verifytoken(req,res,next){
             {
                 linkname:"Login",
                 linkurl:"/login"
-            },
-            {
-                linkname:"Courses",
-                linkurl:"/courses"
-            },
-            {
-                linkname:"Contact",
-                linkurl:"/contact"
             }
         ]
         res.render("home",{links})
