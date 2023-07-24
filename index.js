@@ -28,12 +28,8 @@ app.set("view engine","ejs")
 
 // routes
 
-app.get("/",(req,res)=>{
+app.get("/",verifytoken,(req,res)=>{
     const data = [
-        {
-            linkname:"Register",
-            linkurl:"/register"
-        },
         {
             linkname:"My Dashboard",
             linkurl:"/studentdashboard"
@@ -58,6 +54,15 @@ app.get("/videoupload",(req,res)=>{
     res.render('videoupload')
 })
 
+app.get("/allstudents",async (req,res)=>{
+    const students = await user.find()
+    res.render('allstudents',{students,total:students.length})
+})
+
+app.get("/admin",(req,res)=>{
+    res.render('admin')
+})
+
 app.post("/videoupload",upload,async(req,res)=>{
     const data = {
         title:req.body.title,
@@ -68,11 +73,6 @@ app.post("/videoupload",upload,async(req,res)=>{
     res.send("video uploaded")
 })
 
-
-app.get("/admin",(req,res)=>{
-    res.render('admin')
-})
-
 app.post("/register",generatetoken,async (req,res)=>{
     const checkifuserexist = await user.findOne({email:req.body.email})    
     if(checkifuserexist){
@@ -80,7 +80,6 @@ app.post("/register",generatetoken,async (req,res)=>{
     }else{
         await user.insertMany([req.body])
         res.render('studentdashboard',{status:false})
-        // res.send("your account is created successfully")
     }
 })
 
@@ -107,12 +106,8 @@ app.post("/login",generatetoken,async (req,res)=>{
 app.get("/studentdashboard",verifytoken,async (req,res)=>{
     const checkifuserexist = await user.findOne({email:req.mydata.email,password:req.mydata.password})
     const videos = await video.find()
+    console.log(videos);
     res.render('studentdashboard',{status:checkifuserexist.status,videos})
-})
-
-app.get("/allstudents",async (req,res)=>{
-    const students = await user.find()
-    res.render('allstudents',{students,total:students.length})
 })
 
 app.listen(3200,()=>{

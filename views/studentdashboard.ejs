@@ -1,24 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+        video{
+            width: 60%;
+        }
+        #container{
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .video{
+            border: 2px solid red;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
     <% if(status){ %>
-        <div>admin give you access</div>
+        <h1>your Dashboard</h1>
+        <div id="container">
+        <% videos.forEach((video)=>{ %>
+            <div class="video">
+                <h1><%= video.title %></h1>
+                <h2><%= video.description %></h2>
+                <div><%= video.createdAt %></div>
+                <video controls src="<%= video.videoname %>"></video>
+            </div>
+        <% }) %> 
+    </div>
     <% }else{ %>    
-        <div>wait until admin access you</div>
-    <% } %>  
-    <h1>your videos</h1>
-    <% videos.forEach((video)=>{ %>
-        <div class="video">
-            <h1><%= video.title %></h1>
-            <h2><%= video.description %></h2>
-            <video controls src="<%= video.videoname %>"></video>
-        </div>
-    <% }) %>    
+        <div>wait until admin access</div>
+    <% } %>    
     <!-- <video controls src="16900936391095_6219720129077314067.mp4"></video>   -->
 </body>
 </html>
