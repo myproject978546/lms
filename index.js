@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const user = require('./models/user')
-const courses = require('./models/courses')
+// const courses = require('./models/courses')
 const dbconnect = require('./models/dbconnect')
 const cookieParser = require('cookie-parser')
 const { verifytoken , generatetoken } = require('./auth/index')
