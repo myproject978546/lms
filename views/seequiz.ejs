@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .question{
+            padding: 10px;
+            background-color: rgba(0, 128, 0, 0.692);
+        }
+    </style>
+</head>
+<body>
+    <h1>see quiz</h1>
+    <form action="/givetest/<%= quizid  %>" method="post">
+    <% questions.forEach((question,ind)=>{ %>
+            <div class="question">
+                <div class="questionname"><%= question.question %></div>
+                <input type="radio" name="question<%= ind+1 %>" value="1">
+                <span class="options"><%= question.options[0] %></span>
+                <input type="radio" name="question<%= ind+1 %>" value="2">
+                <span class="options"><%= question.options[1] %></span>
+                <input type="radio" name="question<%= ind+1 %>" value="3">
+                <span class="options"><%= question.options[2] %></span>
+                <input type="radio" name="question<%= ind+1 %>" value="4">
+                <span class="options"><%= question.options[3] %></span>
+            </div>
+            <% }) %>
+            <input type="submit" value="submit">   
+        </form>
+</body>
+</html>

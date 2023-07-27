@@ -1,9 +1,11 @@
 const express = require('express')
 const app = express()
 const user = require('./models/user')
-// const courses = require('./models/courses')
+const controller = require('./controller/controller')
 const dbconnect = require('./models/dbconnect')
 const cookieParser = require('cookie-parser')
+const question = require('./models/question')
+const quiz = require('./models/quiz')
 const { verifytoken , generatetoken } = require('./auth/index')
 const multer = require('multer')
 const video = require('./models/video')
@@ -26,89 +28,22 @@ app.use(express.static('uploads'));
 const upload = multer({ storage }).single('videofile')
 app.set("view engine","ejs")
 
-// routes
-
-app.get("/",verifytoken,(req,res)=>{
-    const data = [
-        {
-            linkname:"My Dashboard",
-            linkurl:"/studentdashboard"
-        },
-        {
-            linkname:"contact us",
-            linkurl:"/contactus"
-        }
-    ]
-    res.render('home',{links:data})
-})
-
-app.get("/register",(req,res)=>{
-    res.render('register')
-})
-
-app.get("/login",(req,res)=>{
-    res.render('login')
-})
-
-app.get("/videoupload",(req,res)=>{
-    res.render('videoupload')
-})
-
-app.get("/allstudents",async (req,res)=>{
-    const students = await user.find()
-    res.render('allstudents',{students,total:students.length})
-})
-
-app.get("/admin",(req,res)=>{
-    res.render('admin')
-})
-
-app.post("/videoupload",upload,async(req,res)=>{
-    const data = {
-        title:req.body.title,
-        description:req.body.description,
-        videoname:req.file.filename
-    }
-    await video.insertMany([data])
-    res.send("video uploaded")
-})
-
-app.post("/register",generatetoken,async (req,res)=>{
-    const checkifuserexist = await user.findOne({email:req.body.email})    
-    if(checkifuserexist){
-        res.send("this email is already in use another account")
-    }else{
-        await user.insertMany([req.body])
-        res.render('studentdashboard',{status:false})
-    }
-})
-
-app.get("/activate/:id", async (req,res)=>{
-    const findstudent = await user.findByIdAndUpdate(req.params.id,{status:true})
-    res.send("activated")
-})
-
-app.get("/deactivate/:id", async (req,res)=>{
-    const findstudent = await user.findByIdAndUpdate(req.params.id,{status:false})
-    res.send("deactivated")
-})
-
-app.post("/login",generatetoken,async (req,res)=>{
-    const checkifuserexist = await user.findOne({email:req.body.email,password:req.body.password})
-    if(!checkifuserexist){
-        res.send("entered user email id or password wrong")
-    }else{
-        const videos = await video.find()
-        res.render('studentdashboard',{status:checkifuserexist.status,videos})
-    }
-})
-
-app.get("/studentdashboard",verifytoken,async (req,res)=>{
-    const checkifuserexist = await user.findOne({email:req.mydata.email,password:req.mydata.password})
-    const videos = await video.find()
-    console.log(videos);
-    res.render('studentdashboard',{status:checkifuserexist.status,videos})
-})
+app.get("/",verifytoken,controller.home)
+app.get("/register",controller.register)
+app.get("/login",generatetoken,controller.login)
+app.get("/videoupload",controller.videoupload)
+app.get("/allstudents",controller.allstudents)
+app.get("/admin",controller.admin)
+app.post("/videoupload",upload,controller.videouploadpost)
+app.post("/register",generatetoken,controller.registerpost)
+app.get("/activate/:id",controller.activate)
+app.get("/deactivate/:id",controller.deactivate)
+app.post("/login",generatetoken,controller.loginpost)
+app.get("/studentdashboard",verifytoken,controller.studentdashboard)
+app.get("/createquiz",controller.createquiz)
+app.post("/createquiz",controller.createquizpost)
+app.get("/seequiz/:id",verifytoken,controller.seequiz)
+app.post("/givetest/:id",verifytoken,controller.givetest)
 
 app.listen(3200,()=>{
     console.log("the server is running");

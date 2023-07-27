@@ -24,10 +24,25 @@
             align-items: center;
             padding: 10px;
         }
+        #quiz{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
+
+    
     <% if(status){ %>
+        <div id="quiz">
+            <h1>Your Quizes</h1>
+            <% quizs.forEach((quiz)=>{ %>
+                <a href="/seequiz/<%= quiz._id %>"><%= quiz.name %></a>
+            <% }) %>    
+        </div>
         <h1>your Dashboard</h1>
         <div id="container">
         <% videos.forEach((video)=>{ %>
