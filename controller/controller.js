@@ -136,7 +136,7 @@ const seequiz = async (req,res)=>{
                 }
             })
         }else{
-            res.send("you have already this quiz")
+            res.send(`you can not take this quiz again and your score is <h1> ${checkscore.score[0]} out of ${checkscore.score[1]}`)
         }
     }catch{
         console.log("there is an error while seequiz");

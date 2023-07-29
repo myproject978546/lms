@@ -1,14 +1,12 @@
+require('dotenv').config();
 const express = require('express')
 const app = express()
 const user = require('./models/user')
 const controller = require('./controller/controller')
 const dbconnect = require('./models/dbconnect')
 const cookieParser = require('cookie-parser')
-const question = require('./models/question')
-const quiz = require('./models/quiz')
 const { verifytoken , generatetoken } = require('./auth/index')
 const multer = require('multer')
-const video = require('./models/video')
 
 const storage = multer.diskStorage({
     destination : function(req,file,cb){
@@ -45,6 +43,6 @@ app.post("/createquiz",controller.createquizpost)
 app.get("/seequiz/:id",verifytoken,controller.seequiz)
 app.post("/givetest/:id",verifytoken,controller.givetest)
 
-app.listen(3200,()=>{
+app.listen(process.env.POR,()=>{
     console.log("the server is running");
 })
